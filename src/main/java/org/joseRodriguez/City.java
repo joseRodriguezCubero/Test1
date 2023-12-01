@@ -70,7 +70,6 @@ public class City {
             }
         } else {
             Menu.choseMenu2(city);
-
         }
     }
     public static String askCityName(){

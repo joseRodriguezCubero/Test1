@@ -1,5 +1,6 @@
 package org.joseRodriguez;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Menu {
@@ -40,7 +41,7 @@ public class Menu {
             System.out.println("1.  - Crear un Mercader.");
             System.out.println("2.  - Crear un Ladrón.");
             System.out.println("3.  - Crear un campesino");
-            System.out.println("0.  - Salir.\n");
+            System.out.println("0.  - Volver al menú anterior.\n");
             option = entrada.nextByte();
             if (option < MIN || option > MAX) {
                 System.out.println("Escoge una opción válida");
@@ -48,13 +49,13 @@ public class Menu {
         } while (option < MIN || option > MAX);
         return option;
     }
-    public static void choseMenu(City city){
+    public static void choseMenu(City city, ArrayList<City> cities){
         boolean exit = false;
 
         do {
             switch (showMenu()) {
                 case 1:
-                    addNpcSeller(cities);
+                    City.addNpcSeller(cities)
                     break;
                 case 2:
                     addItemToSeller(cities);
