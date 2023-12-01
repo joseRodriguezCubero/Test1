@@ -49,40 +49,40 @@ public class Menu {
         } while (option < MIN || option > MAX);
         return option;
     }
-    public static void choseMenu(City city, ArrayList<City> cities){
+    public static void choseMenu(ArrayList<City> cities){
         boolean exit = false;
 
         do {
             switch (showMenu()) {
                 case 1:
-                    City.addNpcSeller(cities)
+                    City.addNpcSellerInCity(cities);
                     break;
                 case 2:
-                    addItemToSeller(cities);
+                    //TODO: addItemToSeller(cities);
                     break;
                 case 3:
-                    metode3();
+                    //TODO: Mostrar el Item más barato de todos los vendedores de una ciudad (lambdas).
                     break;
                 case 4:
-                    metode3();
+                    //TODO: Consultar los ítems de un vendedor (lambdas).
                     break;
                 case 5:
-                    metode3();
+                    City.addCostumerInCity(cities);
                     break;
                 case 6:
-                    metode3();
+                    //TODO: Realizar la compra de un ítem.
                     break;
                 case 7:
-                    metode3();
+                    //TODO: Consultar los ítems de un Comprador.(lambas)
                     break;
                 case 8:
-                    metode3();
+                    City.showAllNpcsByCity(cities);
                     break;
                 case 9:
-                    metode3();
+                    City.showAllCostumersByCity(cities);
                     break;
                 case 10:
-                    metode3();
+                    //TODO: Mostrar todos los ítems de un determinado tipo ordenados por precio (asc) (lamdas).
                     break;
                 case 0:
                     System.out.println("Gracias por utilizar la aplicación");
