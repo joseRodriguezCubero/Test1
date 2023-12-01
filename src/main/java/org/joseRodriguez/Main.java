@@ -20,13 +20,6 @@ public class Main {
 
 
 
-
-
-
-
-
-
-
     public static void metode3() {
         System.out.println("Mètode 3");
     }
