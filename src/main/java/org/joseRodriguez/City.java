@@ -1,6 +1,10 @@
 package org.joseRodriguez;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class City {
     private final String NAME;
@@ -11,6 +15,10 @@ public class City {
         this.NAME = name;
         this.sellers = new ArrayList<>();
         this.costumers = new ArrayList<>();
+    }
+
+    private static Ganga apply(Item item) {
+        return new Ganga(item, item.getPrice());
     }
 
     public String getNAME() {
@@ -219,16 +227,70 @@ public class City {
         }
     }
 
+    public static void searchGanga(ArrayList<City> cities) { //TODO esta mal hay que hacer de una ciudad no de todas
+        try {
+            Ganga lowestPriceInfo = cities.stream()
+                    .flatMap(c -> c.getSellers().stream())
+                    .flatMap(s -> s.getInventory().stream()
+                            .map(item -> new Ganga(item, item.getPrice())))
+                    .min(Comparator.comparingDouble(Ganga::getPrice))
+                    .orElse(null);
+            if (lowestPriceInfo != null) {
+                System.out.println("El precio más bajo de todos los ítems es: " + lowestPriceInfo.getPrice());
+                System.out.println("Pertenece al item: " + Ganga.getItem());
+            } else {
+                System.out.println("No se encontró ningún item.");
+            }
+        } catch (Exception e) {
+            System.out.println("Error al buscar la ganga: " + e.getMessage());
+        }
+    }
 
+    public static List<Item> collectSellersItemsByType(ArrayList<City> cities, String type) {
+       return cities.stream()
+                .flatMap(c -> c.getSellers().stream())
+                .flatMap(c -> c.getInventory().stream())
+                .filter(item -> item.getType().equals(type))
+                .toList();
+    }
+    public static List<Item> collectCostumersItemsByType(ArrayList<City> cities, String type) {
+        return cities.stream()
+                .flatMap(c -> c.getCostumers().stream())
+                .flatMap(c -> c.getInventory().stream())
+                .filter(item -> item.getType().equals(type))
+                .toList();
+    }
+
+    public static void showItemsByTypeOrderedByPrice(ArrayList<City> cities){
+        String type = askTypeOfItem();
+        List<Item> allItems = Stream.concat(
+                        collectCostumersItemsByType(cities, type).stream(),
+                        collectSellersItemsByType(cities, type).stream())
+                .toList();
+
+        if (!allItems.isEmpty()) {
+            List<Item> sortedItems = allItems.stream()
+                    .sorted(Comparator.comparingDouble(Item::getPrice))
+                    .toList();
+
+            sortedItems.forEach(System.out::println);
+        } else {
+            System.out.println("No hay items del tipo: " + type);
+        }
+    }
+
+    public static String askTypeOfItem(){
+        return Entrada.leerString("Introduzca el tipo del Item.");
+    }
     public static String askCityName() {
-        return Entrada.leerString("Introduzca el nombre de la ciudad");
+        return Entrada.leerString("Introduzca el nombre de la ciudad.");
     }
 
     public static String askCostumerName() {
-        return Entrada.leerString("Introduzca el nombre del comprador");
+        return Entrada.leerString("Introduzca el nombre del comprador.");
     }
 
     public static String askNpcName() {
-        return Entrada.leerString("Introduzca el nombre del vendedor");
+        return Entrada.leerString("Introduzca el nombre del vendedor.");
     }
 }

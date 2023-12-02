@@ -13,16 +13,16 @@ public class Menu {
 
         do {
             System.out.println("\n    MENú PRINCIPAL");
-            System.out.println("1.  - Crear un vendedor.");
-            System.out.println("2.  - Añadir un item al inventario de un vendedor.*");
-            System.out.println("3.  - Mostrar el ítem más barato de todos los vendedores de una ciudad**");
-            System.out.println("5.  - Crear un comprador");
-            System.out.println("6.  - Realizar la compra de un ítem.");
-            System.out.println("7.  - Consultar los ítems de un Comprador.**");
-            System.out.println("8.  - Consultar todos los vendedores que hay en una ciudad.**");
-            System.out.println("9.  - Consultar todos los compradores que hay en una ciudad.**");
-            System.out.println("10. - Mostrar todos los ítems de un determinado tipo ordenados por precio (asc). **");
-            System.out.println("0.  - Salir de la aplicación.\n");
+            System.out.println(" 1.  - Crear un vendedor.");
+            System.out.println(" 2.  - Añadir un item al inventario de un vendedor.*");
+            System.out.println(" 3.  - Mostrar el ítem más barato de todos los vendedores de una ciudad**");
+            System.out.println(" 5.  - Crear un comprador");
+            System.out.println(" 6.  - Realizar la compra de un ítem.");
+            System.out.println(" 7.  - Consultar los ítems de un Comprador.**");
+            System.out.println(" 8.  - Consultar todos los vendedores que hay en una ciudad.**");
+            System.out.println(" 9.  - Consultar todos los compradores que hay en una ciudad.**");
+            System.out.println("10.  - Mostrar todos los ítems de un determinado tipo ordenados por precio (asc). **");
+            System.out.println(" 0.  - Salir de la aplicación.\n");
             option = entrada.nextByte();
             if (option < MIN || option > MAX) {
                 System.out.println("Escoge una opción válida");
@@ -61,7 +61,7 @@ public class Menu {
                     City.addItemToNpcByCity(cities);
                     break;
                 case 3:
-                    //TODO: Mostrar el Item más barato de todos los vendedores de una ciudad (lambdas).
+                    City.searchGanga(cities);
                     break;
                 case 4:
                     City.showAllItemsOfNpcByCity(cities);
@@ -82,7 +82,7 @@ public class Menu {
                     City.showAllCostumersByCity(cities);
                     break;
                 case 10:
-                    //TODO: Mostrar todos los ítems de un determinado tipo ordenados por precio (asc) (lamdas).
+                    City.showItemsByTypeOrderedByPrice( cities);
                     break;
                 case 0:
                     System.out.println("Gracias por utilizar la aplicación");
