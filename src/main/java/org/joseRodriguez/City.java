@@ -3,22 +3,18 @@ package org.joseRodriguez;
 import java.util.ArrayList;
 
 public class City {
-    private String name;
+    private final String NAME;
     private ArrayList<NpcSeller> sellers;
     private ArrayList<Costumer> costumers;
 
     public City(String name) {
-        this.name = name;
-        this.sellers = new ArrayList<NpcSeller>();
-        this.costumers = new ArrayList<Costumer>();
+        this.NAME = name;
+        this.sellers = new ArrayList<>();
+        this.costumers = new ArrayList<>();
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public String getNAME() {
+        return NAME;
     }
 
     public ArrayList<NpcSeller> getSellers() {
@@ -48,42 +44,59 @@ public class City {
         Thief thief = new Thief(name);
         this.getSellers().add(thief);
     }
-    public void addMerchant(){
+
+    public void addMerchant() {
         String name = Entrada.leerString("introduzca el nombre del mercader");
         Merchant merchant = new Merchant(name);
         this.getSellers().add(merchant);
     }
-    public void addCostumer(){
+
+    public void addCostumer() {
         String name = Entrada.leerString("introduzca el nombre del mercader");
         Costumer costumer = new Costumer(name);
         this.getCostumers().add(costumer);
     }
+
     public static City searchCity(ArrayList<City> cities, String cityName) {
         return cities.stream()
-                .filter(c -> c.getName().equals(cityName))
+                .filter(c -> c.getNAME().equals(cityName))
                 .toList().get(0);
     }
+
+    public static Costumer searchCostumer(City city, String costumerName) {
+        return city.getCostumers().stream()
+                .filter(c -> c.getName().equals(costumerName))
+                .toList().get(0);
+    }
+
+    public static NpcSeller searchNpc(City city, String NpcName) {
+        return city.getSellers().stream()
+                .filter(c -> c.getName().equals(NpcName))
+                .toList().get(0);
+    }
+
     public static void addNpcSellerInCity(ArrayList<City> cities) {
         City city = searchCity(cities, askCityName());
         city = createOrReturnCity(city);
-        if(city != null){
+        if (city != null) {
             Menu.choseMenu2(city);
         }
     }
+
     public static void addCostumerInCity(ArrayList<City> cities) {
         City city = searchCity(cities, askCityName());
         city = createOrReturnCity(city);
-        if(city != null){
+        if (city != null) {
             city.addCostumer();
         }
     }
 
-    public static void showAllNpcsByCity(ArrayList<City> cities){
-        City city = searchCity(cities,askCityName());
+    public static void showAllNpcsByCity(ArrayList<City> cities) {
+        City city = searchCity(cities, askCityName());
         city.getSellers().forEach(System.out::println);
     }
 
-    public static City createOrReturnCity(City city){
+    public static City createOrReturnCity(City city) {
         if (city == null) {
             String answer = Entrada.leerString("No se ha encontrado la ciudad; desea crearla? (s/n)");
             if (answer.startsWith("s")) {
@@ -97,19 +110,57 @@ public class City {
         }
     }
 
-    public static void showAllItemsOfCostumerByCity(ArrayList<City> cities){
-        City city = searchCity(cities,askCityName());
-        //TODO: finalizar showAllItemsOfCostumerByCity()
-    }
-    public static void showAllItemsOfNpcByCity(ArrayList<City> cities){
-        //TODO: finalizar showAllItemsOfNpcByCity()
+    public static void showAllItemsOfCostumerByCity(ArrayList<City> cities) {
+        City city = searchCity(cities, askCityName());
+        city = createOrReturnCity(city);
+        Costumer costumer = searchCostumer(city, askCostumerName());
+        costumer.getInventory().forEach(System.out::println);
+        //TODO controlar los resultados nulos
     }
 
-    public static void showAllCostumersByCity(ArrayList<City> cities){
-        City city = searchCity(cities,askCityName());
-        city.getCostumers().forEach(System.out::println);
+    public static void showAllItemsOfNpcByCity(ArrayList<City> cities) {
+        City city = searchCity(cities, askCityName());
+        city = createOrReturnCity(city);
+        NpcSeller npc = searchNpc(city, askNpcName());
+        npc.getInventory().forEach(System.out::println);
+        //TODO controlar los resultados nulos
     }
-    public static String askCityName(){
-       return Entrada.leerString("Introduzca el nombre de la ciudad");
+
+    public static void showAllCostumersByCity(ArrayList<City> cities) {
+        City city = searchCity(cities, askCityName());
+        city = createOrReturnCity(city);
+        city.getCostumers().forEach(System.out::println);
+        //TODO controlar los resultados nulos
+    }
+
+    public static Item createItem(){
+        String itemName = Entrada.leerString("Introduzca el nombre del Item.");
+        String itemType = Entrada.leerString("Introduzca el tipo del Item.");
+        float itemPrice = Entrada.leerFloat("Introduzca el precio del item.");
+        return new Item(itemName,itemType,itemPrice);
+    }
+
+    public static void addItemToMerchand(ArrayList<City> cities) {
+        City city = searchCity(cities, askCityName());
+        city = createOrReturnCity(city);
+        NpcSeller npc = searchNpc(city, askNpcName());
+        try {
+            npc.addItem(createItem());
+        } catch (ToMuchForTheSellerException e) {
+            throw new RuntimeException(e);
+        }
+        //TODO ----------------------------------continuar por aquí-------------------------------
+    }
+
+    public static String askCityName() {
+        return Entrada.leerString("Introduzca el nombre de la ciudad");
+    }
+
+    public static String askCostumerName() {
+        return Entrada.leerString("Introduzca el nombre del comprador");
+    }
+
+    public static String askNpcName() {
+        return Entrada.leerString("Introduzca el nombre del vendedor");
     }
 }

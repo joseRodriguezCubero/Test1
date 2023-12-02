@@ -3,6 +3,8 @@ package org.joseRodriguez;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import static org.joseRodriguez.City.showAllItemsOfCostumerByCity;
+
 public class Menu {
 
     public static byte showMenu() {
@@ -22,7 +24,7 @@ public class Menu {
             System.out.println("8.  - Consultar todos los vendedores que hay en una ciudad.**");
             System.out.println("9.  - Consultar todos los compradores que hay en una ciudad.**");
             System.out.println("10. - Mostrar todos los ítems de un determinado tipo ordenados por precio (asc). **");
-            System.out.println("0.  - Sortir de l'aplicació.\n");
+            System.out.println("0.  - Salir de la aplicación.\n");
             option = entrada.nextByte();
             if (option < MIN || option > MAX) {
                 System.out.println("Escoge una opción válida");
@@ -58,13 +60,13 @@ public class Menu {
                     City.addNpcSellerInCity(cities);
                     break;
                 case 2:
-                    //TODO: addItemToSeller(cities);
+                    //TODO: addItemToSeller(cities)----------siguiente método--------------------------------
                     break;
                 case 3:
                     //TODO: Mostrar el Item más barato de todos los vendedores de una ciudad (lambdas).
                     break;
                 case 4:
-                    //TODO: Consultar los ítems de un vendedor (lambdas).
+                    City.showAllItemsOfNpcByCity(cities);
                     break;
                 case 5:
                     City.addCostumerInCity(cities);
@@ -73,7 +75,7 @@ public class Menu {
                     //TODO: Realizar la compra de un ítem.
                     break;
                 case 7:
-                    //TODO: Consultar los ítems de un Comprador.(lambas)
+                    City.showAllItemsOfCostumerByCity(cities);
                     break;
                 case 8:
                     City.showAllNpcsByCity(cities);

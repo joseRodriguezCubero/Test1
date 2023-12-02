@@ -5,8 +5,14 @@ import java.util.Objects;
 public class Item {
     private String name;
     private String type;
-    private float price = 0;
-    private byte state;
+    private float price;
+    private byte state = 100;
+
+    public Item(String name, String type, float price) {
+        this.name = name;
+        this.type = type;
+        this.price = price;
+    }
 
     public String getName() {
         return name;
@@ -59,7 +65,7 @@ public class Item {
                 "name='" + name + '\'' +
                 ", type='" + type + '\'' +
                 ", price=" + price +
-                ", state=" + state +
+                ", state=" + state +"%"+
                 '}';
     }
 }
