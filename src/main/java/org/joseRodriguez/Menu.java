@@ -3,8 +3,6 @@ package org.joseRodriguez;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import static org.joseRodriguez.City.showAllItemsOfCostumerByCity;
-
 public class Menu {
 
     public static byte showMenu() {
@@ -39,7 +37,7 @@ public class Menu {
         final byte MAX = 3;
 
         do {
-            System.out.println("\n    MENú PRINCIPAL");
+            System.out.println("\n    MENU DE VENDEDORES");
             System.out.println("1.  - Crear un Mercader.");
             System.out.println("2.  - Crear un Ladrón.");
             System.out.println("3.  - Crear un campesino");
@@ -60,7 +58,7 @@ public class Menu {
                     City.addNpcSellerInCity(cities);
                     break;
                 case 2:
-                    //TODO: addItemToSeller(cities)----------siguiente método--------------------------------
+                    City.addItemToNpcByCity(cities);
                     break;
                 case 3:
                     //TODO: Mostrar el Item más barato de todos los vendedores de una ciudad (lambdas).
