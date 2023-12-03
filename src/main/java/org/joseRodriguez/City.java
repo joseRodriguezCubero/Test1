@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class City {
@@ -18,9 +17,6 @@ public class City {
         this.costumers = new ArrayList<>();
     }
 
-    private static Ganga apply(Item item) {
-        return new Ganga(item, item.getPrice());
-    }
 
     public String getNAME() {
         return NAME;
