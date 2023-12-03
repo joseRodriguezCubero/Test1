@@ -61,16 +61,16 @@ public class Menu {
                     City.addItemToNpcByCity(cities);
                     break;
                 case 3:
-                    City.searchGanga(cities);
+                    City.searchGanga(City.searchCity(cities, City.askCityName()));
                     break;
                 case 4:
-                    City.showAllItemsOfNpcByCity(cities);
+                    City.showAllItemsOfNpcByCity(City.searchCity(cities, City.askCityName()));
                     break;
                 case 5:
                     City.addCostumerInCity(cities);
                     break;
                 case 6:
-                    //TODO: Realizar la compra de un ítem.
+                    City.takeMyMoney(cities);
                     break;
                 case 7:
                     City.showAllItemsOfCostumerByCity(cities);

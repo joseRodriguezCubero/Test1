@@ -105,7 +105,7 @@ public class City {
         }
     }
 
-    public static void showAllNpcsByCity(ArrayList<City> cities) {
+    public static void showAllNpcsByCity(ArrayList<City> cities) { //TODO mirar si es necesario hacer mas excepciones
         City city = searchCity(cities, askCityName());
         if (city != null) {
             if (!city.getSellers().isEmpty()) {
@@ -116,20 +116,24 @@ public class City {
         }
     }
 
+    public static City createCity(ArrayList<City> cities) {
+        String answer = Entrada.leerString("No se ha encontrado la ciudad; desea crearla? (s/n)");
 
-    public static City createCity(ArrayList<City> cities) { //TODO mejorar verificación.
-            String answer = Entrada.leerString("No se ha encontrado la ciudad; desea crearla? (s/n)");
-            if (answer.startsWith("s")) {
-                City city = new City(askCityName());
-                cities.add(city);
-                return city;
-            } else {
-                System.out.println("volviendo al menu.");
-                return null;
-            }
+        while (!answer.equalsIgnoreCase("s") && !answer.equalsIgnoreCase("n")) {
+            System.out.println("Respuesta inválida. Por favor, ingrese 's' para sí o 'n' para no.");
+            answer = Entrada.leerString("Desea crear la ciudad? (s/n)");
+        }
+        if (answer.equalsIgnoreCase("s")) {
+            City city = new City(askCityName());
+            cities.add(city);
+            return city;
+        } else {
+            System.out.println("Volviendo al menú.");
+            return null;
+        }
     }
 
-    public static void showAllItemsOfCostumerByCity(ArrayList<City> cities) {
+    public static void showAllItemsOfCostumerByCity(ArrayList<City> cities) { //TODO mirar si es necesario hacer mas excepciones
         City city = searchCity(cities, askCityName());
         if (city != null) {
             Costumer costumer = searchCostumer(city, askCostumerName());
@@ -145,8 +149,7 @@ public class City {
         }
     }
 
-    public static void showAllItemsOfNpcByCity(ArrayList<City> cities) {
-        City city = searchCity(cities, askCityName());
+    public static void showAllItemsOfNpcByCity(City city) { //TODO mirar si es necesario hacer mas excepciones
         if (city != null) {
             NpcSeller npc = searchNpc(city, askNpcName());
             if (npc != null) {
@@ -199,47 +202,43 @@ public class City {
 
     public static void addItemToMerchant(Merchant merchant) {
         try {
-            if (merchant.getInventory().size() < Merchant.MAXITEMS) {
-                merchant.addItem(createItem());
-            }
+            merchant.addItem(createItem());
+            System.out.println("Item agregado al inventario del mercader.");
         } catch (ToMuchForTheSellerException e) {
-            System.out.println("El inventario del mercader está lleno.");
+            System.out.println("El inventario del mercader está lleno. No se pudo agregar el item.");
         }
     }
 
     public static void addItemToThief(Thief thief) {
         try {
-            if (thief.getInventory().size() < Thief.MAXITEMS) {
-                thief.addItem(createItem());
-            }
+            thief.addItem(createItem());
+            System.out.println("Item agregado al inventario del mercader.");
         } catch (ToMuchForTheSellerException e) {
-            System.out.println("El inventario del ladrón está lleno.");
+            System.out.println("El inventario del mercader está lleno. No se pudo agregar el item.");
         }
     }
 
     public static void addItemToPeasant(Peasant peasant) {
         try {
-            if (peasant.getInventory().size() < Peasant.MAXITEMS) {
-                peasant.addItem(createItem());
-            }
+            peasant.addItem(createItem());
+            System.out.println("Item agregado al inventario del mercader.");
         } catch (ToMuchForTheSellerException e) {
-            System.out.println("El inventario del campesino está lleno.");
+            System.out.println("El inventario del mercader está lleno. No se pudo agregar el item.");
         }
     }
 
-    public static void searchGanga(ArrayList<City> cities) { //TODO esta mal hay que hacer de una ciudad no de todas
+    public static void searchGanga(City city) { //TODO verificar esto.
         try {
-            Ganga lowestPriceInfo = cities.stream()
-                    .flatMap(c -> c.getSellers().stream())
+            Ganga lowestPriceInfo = city.getSellers().stream()
                     .flatMap(s -> s.getInventory().stream()
                             .map(item -> new Ganga(item, item.getPrice())))
                     .min(Comparator.comparingDouble(Ganga::getPrice))
                     .orElse(null);
             if (lowestPriceInfo != null) {
-                System.out.println("El precio más bajo de todos los ítems es: " + lowestPriceInfo.getPrice());
-                System.out.println("Pertenece al item: " + Ganga.getItem());
+                System.out.println("El precio más bajo de todos los ítems en la ciudad " + city.getNAME() + " es: " + lowestPriceInfo.getPrice());
+                System.out.println("Pertenece al ítem: " + Ganga.getItem());
             } else {
-                System.out.println("No se encontró ningún item.");
+                System.out.println("No se encontró ningún ítem en la ciudad " + city.getNAME() + ".");
             }
         } catch (Exception e) {
             System.out.println("Error al buscar la ganga: " + e.getMessage());
@@ -261,7 +260,7 @@ public class City {
                 .toList();
     }
 
-    public static void showItemsByTypeOrderedByPrice(ArrayList<City> cities){
+    public static void showItemsByTypeOrderedByPrice(ArrayList<City> cities){ //TODO mirar bien el method reference el código a veces se vuelve loco con ::getPrice
         String type = askTypeOfItem();
         List<Item> allItems = Stream.concat(
                         collectCostumersItemsByType(cities, type).stream(),
@@ -279,6 +278,55 @@ public class City {
         }
     }
 
+    public static void takeMyMoney(ArrayList<City> cities){ //TODO verificar esto
+        City city = searchCity(cities, askCityName());
+        Costumer costumer = searchCostumer(city, askCostumerName());
+        NpcSeller npc = searchNpc(city, askNpcName());
+
+        if (costumer != null && npc != null) {
+            Item selectedItem = peekAnItem(npc);
+
+            if (selectedItem != null) {
+                processPurchase(costumer, npc, selectedItem);
+            }
+        }
+    }
+
+    private static void processPurchase(Costumer costumer, NpcSeller npc, Item selectedItem) { //TODO verificar esto
+        try {
+            npc.removeItem(selectedItem);
+            costumer.addItem(selectedItem);
+
+            System.out.println("Compra realizada con éxito. " + costumer.getName() + " ha comprado: " + selectedItem);
+        } catch (NoMoneyMyFriendException e) {
+            System.out.println("No tienes suficiente dinero para comprar este artículo.");
+        }
+    }
+
+    public static Item peekAnItem(NpcSeller npc) {   //TODO verificar esto
+        boolean exit = false;
+        Item selected = null;
+        while (!exit) {
+            System.out.println("Los items del vendedor " + npc.getName() + " son:");
+            int count = 1;
+            for (Item item : npc.getInventory()) {
+                System.out.println(count + ": " + item);
+                count++;
+            }
+            System.out.println("0: Salir");
+            int option = Entrada.leerByte("Introduzca el número del item (o 0 para salir): ");
+            if (option == 0) {
+                exit = true;
+            } else if (option >= 1 && option <= npc.getInventory().size()) {
+                selected = npc.getInventory().get(option - 1);
+                System.out.println("Has seleccionado: " + selected);
+            } else {
+                System.out.println("Opción inválida. Por favor, elige un número válido.");
+            }
+        }
+        return selected;
+    }
+
     public static String askTypeOfItem(){
         return Entrada.leerString("Introduzca el tipo del Item.");
     }
@@ -293,4 +341,5 @@ public class City {
     public static String askNpcName() {
         return Entrada.leerString("Introduzca el nombre del vendedor.");
     }
+
 }

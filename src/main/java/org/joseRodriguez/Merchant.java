@@ -11,11 +11,14 @@ public class Merchant extends NpcSeller {
 
     @Override
     public void addItem(Item item) throws ToMuchForTheSellerException {
-        float tax = item.getPrice() * TAX;
-        item.setPrice(item.getPrice() + tax);
-        getInventory().add(item);
+        if (inventory.size() < MAXITEMS) {
+            float tax = item.getPrice() * TAX;
+            item.setPrice(item.getPrice() + tax);
+            getInventory().add(item);
+        } else {
+            throw new ToMuchForTheSellerException("El inventario del campesino está lleno.");
+        }
     }
-
     @Override
     public String toString() {
         return "Merchant{} " + super.toString();

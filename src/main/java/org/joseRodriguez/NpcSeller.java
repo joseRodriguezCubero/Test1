@@ -7,6 +7,8 @@ public abstract class NpcSeller {
     private String name;
     protected ArrayList<Item> inventory;
 
+    protected float money = 500f;
+
     public String getName() {
         return name;
     }
@@ -23,6 +25,14 @@ public abstract class NpcSeller {
         this.inventory = inventory;
     }
 
+    public float getMoney() {
+        return money;
+    }
+
+    public void setMoney(float money) {
+        this.money = money;
+    }
+
     public void showItemsName() {
         this.inventory.forEach(System.out::println);
     }
@@ -32,6 +42,8 @@ public abstract class NpcSeller {
         this.inventory = new ArrayList<Item>();
     }
 
+
+
     public abstract void addItem(Item item) throws ToMuchForTheSellerException;
 
     @Override
@@ -39,5 +51,9 @@ public abstract class NpcSeller {
         return "NpcSeller{" +
                 "name='" + name + '\'' +
                 '}';
+    }
+
+    public void removeItem(Item item) {
+        this.inventory.remove(item);
     }
 }
