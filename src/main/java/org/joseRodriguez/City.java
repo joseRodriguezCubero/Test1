@@ -3,6 +3,7 @@ package org.joseRodriguez;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -79,16 +80,30 @@ public class City {
         }
     }
 
-    public static Costumer searchCostumer(City city, String costumerName) throws ArrayIndexOutOfBoundsException {
-        return city.getCostumers().stream()
-                .filter(c -> c.getName().equals(costumerName))
-                .toList().get(0);
+    public static Costumer searchCostumer(City city, String costumerName) {
+        Optional<Costumer> foundCostumer = city.getCostumers().stream()
+                .filter(c -> c.getName().equalsIgnoreCase(costumerName))
+                .findFirst();
+
+        if (foundCostumer.isPresent()) {
+            return foundCostumer.get();
+        } else {
+            System.out.println("Vendedor no encontrado. Para el vendedor " + costumerName);
+            return null;
+        }
     }
 
-    public static NpcSeller searchNpc(City city, String NpcName) throws ArrayIndexOutOfBoundsException {
-        return city.getSellers().stream()
-                .filter(c -> c.getName().equals(NpcName))
-                .toList().get(0);
+    public static NpcSeller searchNpc(City city, String npcName) {
+        Optional<NpcSeller> foundNpc = city.getSellers().stream()
+                .filter(c -> c.getName().equalsIgnoreCase(npcName))
+                .findFirst();
+
+        if (foundNpc.isPresent()) {
+            return foundNpc.get();
+        } else {
+            System.out.println("Vendedor no encontrado. Para el vendedor " + npcName);
+            return null;
+        }
     }
 
     public static void addNpcSellerInCity(ArrayList<City> cities) {
